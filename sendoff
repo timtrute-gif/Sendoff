@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sendoff Ventures — Bachelor Parties in San Diego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0b;
+    --charcoal: #141416;
+    --card: #1a1a1e;
+    --border: rgba(255,255,255,0.07);
+    --white: #f5f4f0;
+    --blue: #1e8fff;
+    --blue-glow: rgba(30,143,255,0.25);
+    --neon: #00f0ff;
+    --sand: #c8a96e;
+    --muted: rgba(245,244,240,0.45);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    /* Custom cursor works best on desktop */
+  }
+
+  @media (min-width: 901px) {
+    body { cursor: none; }
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--blue);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(30,143,255,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+    }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 48px;
+    background: linear-gradient(to bottom, rgba(10,10,11,0.9) 0%, transparent 100%);
+    transition: backdrop-filter 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,11,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--blue);
+    color: var(--white);
+    padding: 10px 24px;
+    border: none;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { background: var(--neon); color: var(--black); box-shadow: 0 0 24px rgba(0,240,255,0.4); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 720px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(30,143,255,0.12) 0%, transparent 60%),
+                linear-gradient(160deg, #0d0d12 0%, #0a0a0b 50%, #0f0a14 100%);
+  }
+  .hero-img {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1565118531796-763e5082d113?w=1800&auto=format&fit=crop&q=85') center/cover no-repeat;
+    opacity: 0.28;
+    mix-blend-mode: luminosity;
+  }
+  .hero-content { position: relative; z-index: 2; padding: 0 48px 80px; max-width: 900px; }
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    line-height: 0.92;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-headline .accent { color: var(--blue); }
+  .hero-sub { margin-top: 28px; font-size: 1.05rem; line-height: 1.65; color: var(--muted); max-width: 520px; }
+  
+  /* Buttons */
+  .btn-primary {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 36px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 40px;
+  }
+
+  /* REVEAL ON SCROLL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* PACKAGES GRID */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 80px 48px;
+  }
+  .pkg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 30px;
+    transition: transform 0.3s;
+  }
+  .pkg-card:hover { transform: translateY(-10px); border-color: var(--blue); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .hero-content { padding: 0 24px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">SENDOFF<span>.</span>VENTURES</a>
+  <ul class="nav-links">
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Build Your Trip</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-img"></div>
+  <div class="hero-content">
+    <h1 class="hero-headline">Plan the <span class="accent">Ultimate</span> Bachelor Party</h1>
+    <p class="hero-sub">San Diego's premier booking facilitator for high-end bachelor experiences. Effortless planning starts here.</p>
+    <a href="#" class="btn-primary">Start Planning Now</a>
+  </div>
+</section>
+
+<section id="packages" class="reveal">
+    <div style="text-align: center; padding-top: 60px;">
+        <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem;">The Packages</h2>
+    </div>
+    <div class="packages-grid">
+        <div class="pkg-card">
+            <h3 style="font-family: 'Syne'; margin-bottom: 15px;">Yacht Weekend</h3>
+            <p style="color: var(--muted);">Private charters, catering, and sunset views.</p>
+        </div>
+        <div class="pkg-card">
+            <h3 style="font-family: 'Syne'; margin-bottom: 15px;">Nightlife VIP</h3>
+            <p style="color: var(--muted);">Gaslamp's best tables and club access.</p>
+        </div>
+        <div class="pkg-card">
+            <h3 style="font-family: 'Syne'; margin-bottom: 15px;">Golf & Brews</h3>
+            <p style="color: var(--muted);">Championship greens and local craft tours.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+  // Cursor Logic
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  
+  if(cursor && ring) {
+      document.addEventListener('mousemove', (e) => {
+          cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+          ring.style.transform = `translate(${e.clientX - 13}px, ${e.clientY - 13}px)`;
+      });
+  }
+
+  // Navbar Scroll Effect
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+  });
+
+  // Intersection Observer for Reveal Animations
+  const observerOptions = { threshold: 0.2 };
+  const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+          if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+          }
+      });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
